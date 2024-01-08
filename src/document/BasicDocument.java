@@ -34,7 +34,7 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumWords()
 	{
-		return super.getTokens("[a-zA-Z]+").size();
+		return super.getTokens("[a-zA-Z']+").size();
 	}
 	
 	/**
