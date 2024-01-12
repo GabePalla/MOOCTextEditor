@@ -1,6 +1,7 @@
 package document;
 
 import java.util.List;
+import java.util.Objects;
 
 /** 
  * A class that represents a text document
@@ -37,6 +38,13 @@ public class EfficientDocument extends Document {
 	    // You probably don't want to change it.
 		return !(tok.indexOf("!") >=0 || tok.indexOf(".") >=0 || tok.indexOf("?")>=0);
 	}
+
+	private boolean isLastTokenAWord(List<String> tokensList) {
+		if(!tokensList.isEmpty()) {
+			return isWord(tokensList.get(tokensList.size() - 1));
+		}
+		return false;
+	}
 	
 	
     /** Passes through the text one time to count the number of words, syllables 
@@ -51,6 +59,27 @@ public class EfficientDocument extends Document {
 		// MAKE SURE YOU UNDERSTAND THIS LINE BEFORE YOU CODE THE REST
 		// OF THIS METHOD.
 		List<String> tokens = getTokens("[!?.]+|[a-zA-Z]+");
+		int numberOfWords = 0;
+		int numberOfSentences = 0;
+		int numberOfSyllables = 0;
+		for(int i = 0; i < tokens.size(); i++) {
+			if(isWord(tokens.get(i))) {
+				numberOfWords++;
+				numberOfSyllables = numberOfSyllables + super.countSyllables(tokens.get(i));
+			}
+
+			if (!isWord(tokens.get(i))) {
+				numberOfSentences++;
+			}
+		}
+
+		if(isLastTokenAWord(tokens)) {
+			numberOfSentences++;
+		}
+
+		this.numWords = numberOfWords;
+		this.numSentences = numberOfSentences;
+		this.numSyllables = numberOfSyllables;
 		
 		// TODO: Finish this method.  Remember the countSyllables method from 
 		// Document.  That will come in handy here.  isWord defined above will also help.
@@ -73,7 +102,7 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumSentences() {
 		//TODO: write this method.  Hint: It's simple
-		return 0;
+		return this.numSentences;
 	}
 
 	
@@ -94,7 +123,7 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumWords() {
 		//TODO: write this method.  Hint: It's simple
-	    return 0;
+	    return this.numWords;
 	}
 
 
@@ -116,7 +145,7 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumSyllables() {
         //TODO: write this method.  Hint: It's simple
-        return 0;
+        return this.numSyllables;
 	}
 	
 	// Can be used for testing
