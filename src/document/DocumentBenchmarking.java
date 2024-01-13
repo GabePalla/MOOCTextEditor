@@ -70,7 +70,7 @@ public class DocumentBenchmarking {
 
 			long startTimeEfficientDocument = System.nanoTime();
 			for (int i = 0; i < trials; i++) {
-				new BasicDocument(charactesFromFile).getFleschScore();
+				new EfficientDocument(charactesFromFile).getFleschScore();
 			}
 			long endTimeEfficientDocument = System.nanoTime();
 			System.out.println(
