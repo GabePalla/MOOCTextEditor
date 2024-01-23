@@ -57,9 +57,7 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 
 	public E get(int index) {
-		if (index < 0 && index > this.size) {
-			throw new IndexOutOfBoundsException();
-		}
+		indexValidation(index);
 
 		LLNode<E> storedNode = null;
 
@@ -71,6 +69,29 @@ public class MyLinkedList<E> extends AbstractList<E> {
 		return storedNode.data;
 	}
 
+	private LLNode<E> getNode(int index) {
+		indexValidation(index);
+
+		LLNode<E> storedNode = null;
+
+		storedNode = this.head;
+		for (int i = 0; i <= index; i++) {
+			storedNode = storedNode.next;
+		}
+
+		return storedNode;
+	}
+
+	private void indexValidation(int index) {
+		if (index < 0 || index >= this.size) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		if(this.size == 0) {
+			throw new IndexOutOfBoundsException();
+		}
+	}
+
 	/**
 	 * Add an element to the list at the specified index
 	 * 
@@ -79,6 +100,19 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public void add(int index, E element) {
 		// TODO: Implement this method
+		indexValidation(index);
+
+		this.size++;
+
+		LLNode<E> current = getNode(index);
+		LLNode<E> previous = current.prev;
+		LLNode<E> newNode = new LLNode(element);
+
+		current.prev = newNode;
+		newNode.next = current;
+		newNode.prev = previous;
+		previous.next = newNode;
+		
 	}
 
 	/** Return the size of the list */
@@ -97,7 +131,14 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public E remove(int index) {
 		// TODO: Implement this method
-		return null;
+		indexValidation(index);
+		LLNode<E> current = getNode(index);
+		LLNode<E> previous = current.prev;
+		LLNode<E> next = current.next;
+		previous.next = next;
+		next.prev = previous;
+		this.size--;
+		return current.data;
 	}
 
 	/**
@@ -110,7 +151,11 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	 */
 	public E set(int index, E element) {
 		// TODO: Implement this method
-		return null;
+		indexValidation(index);
+		LLNode<E> current = getNode(index);
+		E previousData = current.data;
+		current.data = element;
+		return previousData;
 	}
 }
 
@@ -135,5 +180,23 @@ class LLNode<E> {
  */
 class InnerMyLinkedList {
 	public static void main(String[] args) {
+		MyLinkedList<Integer> LList = new MyLinkedList<>();
+
+		LList.add(1);
+		LList.add(2);
+		LList.add(3);
+		LList.add(4);
+
+		LList.set(1, 10);
+
+		System.out.println("Should be a 10: " + LList.get(1));
+
+
+		// LList.add(2, 10);
+
+		// System.out.println("Should be a 2: " + LList.get(1));
+		// System.out.println("Should be a 10: " + LList.get(2));
+		// System.out.println("Should be a 3: " + LList.get(3));
+		// System.out.println("Should be a 4: " + LList.get(4));
 	}
 }
