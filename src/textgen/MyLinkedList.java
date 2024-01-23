@@ -174,29 +174,3 @@ class LLNode<E> {
 	}
 
 }
-
-/**
- * InnerMyLinkedList
- */
-class InnerMyLinkedList {
-	public static void main(String[] args) {
-		MyLinkedList<Integer> LList = new MyLinkedList<>();
-
-		LList.add(1);
-		LList.add(2);
-		LList.add(3);
-		LList.add(4);
-
-		LList.set(1, 10);
-
-		System.out.println("Should be a 10: " + LList.get(1));
-
-
-		// LList.add(2, 10);
-
-		// System.out.println("Should be a 2: " + LList.get(1));
-		// System.out.println("Should be a 10: " + LList.get(2));
-		// System.out.println("Should be a 3: " + LList.get(3));
-		// System.out.println("Should be a 4: " + LList.get(4));
-	}
-}
