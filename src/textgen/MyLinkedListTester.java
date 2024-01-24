@@ -5,8 +5,6 @@ package textgen;
 
 import static org.junit.Assert.*;
 
-import java.util.LinkedList;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,8 +20,6 @@ public class MyLinkedListTester {
 	MyLinkedList<Integer> emptyList;
 	MyLinkedList<Integer> longerList;
 	MyLinkedList<Integer> list1;
-	MyLinkedList<Integer> LList;
-	MyLinkedList<Integer> LList2;
 
 	/**
 	 * @throws java.lang.Exception
@@ -43,26 +39,6 @@ public class MyLinkedListTester {
 		list1.add(65);
 		list1.add(21);
 		list1.add(42);
-
-		LList = new MyLinkedList<Integer>();
-		LList.add(1);
-		LList.add(2);
-		LList.add(3);
-		LList.add(4);
-
-		LList.set(1, 10);
-		LList.set(2, 11);
-		LList.set(3, 12);
-
-		LList2 = new MyLinkedList<Integer>();
-		LList2.add(1);
-		LList2.add(2);
-		LList2.add(3);
-		LList2.add(4);
-		LList2.add(2, 20);
-		LList2.add(2, 30);
-		LList2.add(2, 40);
-
 	}
 
 	/**
@@ -125,12 +101,30 @@ public class MyLinkedListTester {
 	 */
 	@Test
 	public void testRemove() {
-		int a = list1.remove(0);
-		assertEquals("Remove: check a is correct ", 65, a);
+		// TODO: Add more tests here
+		try {
+			list1.remove(-1);
+			fail("Cannot remove negative index");
+		} catch (IndexOutOfBoundsException e) {
+
+		}
+
+		try {
+			list1.remove(5);
+			fail("Cannot remove index greater than bound");
+		} catch (IndexOutOfBoundsException e) {
+
+		}
+
+		int sixtyFive = list1.remove(0);
+		assertEquals("Remove: check a is correct ", 65, sixtyFive);
 		assertEquals("Remove: check element 0 is correct ", (Integer) 21, list1.get(0));
 		assertEquals("Remove: check size is correct ", 2, list1.size());
 
-		// TODO: Add more tests here
+		String a = shortList.remove(0);
+		assertEquals("Remove: check a is correct ", "A", a);
+		assertEquals("Remove: check element 0 is correct ", "B", shortList.get(0));
+		assertEquals("Remove: check size is correct ", 1, shortList.size());
 	}
 
 	/**
@@ -140,19 +134,24 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddEnd() {
 		// TODO: implement this test
+		try {
+			shortList.add(null);
+			fail("Cannot add null data");
+		} catch (NullPointerException e) {
 
+		}
+
+		assertEquals("add C", true, shortList.add("C"));
 	}
 
 	/** Test the size of the list */
 	@Test
 	public void testSize() {
 		// TODO: implement this test
-		assertEquals("Check the size of the shortList: ", 2, shortList.size());
-		assertEquals("Check the size of the emptyList: ", 0, emptyList.size());
-		assertEquals("Check the size of the longerList: ", LONG_LIST_LENGTH, longerList.size());
-		assertEquals("Check the size of the LList4: ", 4, LList.size());
-		assertEquals("Check the size of the LList2: ", 7, LList2.size());
-
+		assertEquals("shortList size", 2, shortList.size());
+		assertEquals("emptyList size", 0, emptyList.size());
+		assertEquals("longerList size", 10, longerList.size());
+		assertEquals("list1 size", 3, list1.size());
 	}
 
 	/**
@@ -163,21 +162,38 @@ public class MyLinkedListTester {
 	@Test
 	public void testAddAtIndex() {
 		// TODO: implement this test
-		assertEquals("Should be a 40: ", (Integer)40, LList2.get(2));
-		assertEquals("Should be a 30: ", (Integer)30, LList2.get(3));
-		assertEquals("Should be a 20: ", (Integer)20, LList2.get(4));
-		assertEquals("Should be a 2: ", (Integer)3, LList2.get(5));
-		
+		{
+			try {
+				shortList.add(null);
+				fail("Cannot add null data");
+			} catch (NullPointerException e) {
 
+			}
+			shortList.add(0, "C");
+			assertEquals("C added at index 0", "C", shortList.get(0));
+		}
 	}
 
 	/** Test setting an element in the list */
 	@Test
 	public void testSet() {
 		// TODO: implement this test
-		assertEquals("Should be a 10: ", (Integer)10, LList.get(1));
-		assertEquals("Should be a 11: ", (Integer)11, LList.get(2));
-		assertEquals("Should be a 12: ", (Integer)12, LList.get(3));
+		// test empty list, get should throw an exception
+		try {
+			emptyList.set(0, 1);
+			fail("Check out of bounds");
+		} catch (IndexOutOfBoundsException e) {
+
+		}
+
+		try {
+			shortList.set(-1, "Yolo");
+			fail("Check out of bounds");
+		} catch (IndexOutOfBoundsException e) {
+
+		}
+		String oldValue = shortList.set(0, "Yolo");
+		assertEquals("Updated value", "Yolo", shortList.get(0));
 	}
 
 	// TODO: Optionally add more test methods.
