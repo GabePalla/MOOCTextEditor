@@ -187,14 +187,3 @@ class LLNode<E> {
 	}
 
 }
-
-/**
- * InnerMyLinkedList
- */
-class InnerMyLinkedList {
-	public static void main(String[] args) {
-		MyLinkedList<Integer> lista = new MyLinkedList<>();
-		
-	}
-
-}
