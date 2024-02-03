@@ -1,66 +1,99 @@
 package spelling;
 
-import java.util.List;
-import java.util.Set;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
-/** 
- * An trie data structure that implements the Dictionary and the AutoComplete ADT
+/**
+ * An trie data structure that implements the Dictionary and the AutoComplete
+ * ADT
+ * 
  * @author You
  *
  */
-public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
+public class AutoCompleteDictionaryTrie implements Dictionary, AutoComplete {
 
-    private TrieNode root;
-    private int size;
-    
+	private TrieNode root;
+	private int size;
 
-    public AutoCompleteDictionaryTrie()
-	{
+	public AutoCompleteDictionaryTrie() {
 		root = new TrieNode();
 	}
-	
-	
-	/** Insert a word into the trie.
-	 * For the basic part of the assignment (part 2), you should convert the 
-	 * string to all lower case before you insert it. 
+
+	/**
+	 * Insert a word into the trie.
+	 * For the basic part of the assignment (part 2), you should convert the
+	 * string to all lower case before you insert it.
 	 * 
-	 * This method adds a word by creating and linking the necessary trie nodes 
-	 * into the trie, as described outlined in the videos for this week. It 
-	 * should appropriately use existing nodes in the trie, only creating new 
-	 * nodes when necessary. E.g. If the word "no" is already in the trie, 
-	 * then adding the word "now" would add only one additional node 
+	 * This method adds a word by creating and linking the necessary trie nodes
+	 * into the trie, as described outlined in the videos for this week. It
+	 * should appropriately use existing nodes in the trie, only creating new
+	 * nodes when necessary. E.g. If the word "no" is already in the trie,
+	 * then adding the word "now" would add only one additional node
 	 * (for the 'w').
 	 * 
 	 * @return true if the word was successfully added or false if it already exists
-	 * in the dictionary.
+	 *         in the dictionary.
 	 */
-	public boolean addWord(String word)
-	{
-	    //TODO: Implement this method.
-	    return false;
+	public boolean addWord(String word) {
+		TrieNode currNode = this.root;
+		String lowerCaseWord = word.toLowerCase();
+
+		if (isWord(lowerCaseWord)) {
+			return false;
+		}
+
+		for (int i = 0; i < lowerCaseWord.length(); i++) {
+
+			Character characCurr = lowerCaseWord.charAt(i);
+			TrieNode nodeChild = currNode.getChild(characCurr);
+
+			if (Objects.isNull(nodeChild)) {
+				currNode.insert(characCurr);
+			}
+
+			currNode = currNode.getChild(characCurr);
+		}
+
+		currNode.setEndsWord(true);
+		this.size++;
+		return true;
 	}
-	
-	/** 
-	 * Return the number of words in the dictionary.  This is NOT necessarily the same
+
+	/**
+	 * Return the number of words in the dictionary. This is NOT necessarily the
+	 * same
 	 * as the number of TrieNodes in the trie.
 	 */
-	public int size()
-	{
-	    //TODO: Implement this method
-	    return 0;
+	public int size() {
+		// TODO: Implement this method
+		return this.size;
 	}
-	
-	
-	/** Returns whether the string is a word in the trie, using the algorithm
-	 * described in the videos for this week. */
+
+	/**
+	 * Returns whether the string is a word in the trie, using the algorithm
+	 * described in the videos for this week.
+	 */
 	@Override
-	public boolean isWord(String s) 
-	{
-	    // TODO: Implement this method
-		return false;
+	public boolean isWord(String s) {
+		// TODO: Implement this method
+		TrieNode currNode = this.root;
+		String lowerCaseWord = s.toLowerCase();
+
+		for (int i = 0; i < lowerCaseWord.length(); i++) {
+			Character characCurr = lowerCaseWord.charAt(i);
+			TrieNode nodeChild = currNode.getChild(characCurr);
+
+			if (Objects.isNull(nodeChild)) {
+				return false;
+			}
+
+			currNode = currNode.getChild(characCurr);
+		}
+
+		return currNode.endsWord();
 	}
 
 	/** 
@@ -100,31 +133,64 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       If it is a word, add it to the completions list
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
+
+		TrieNode currNode = this.root;
+		String lowerCaseWord = prefix.toLowerCase();
+		LinkedList<TrieNode> queue = new LinkedList<>();
+		List<String> resultList = new ArrayList<>();
+		boolean isComplete = true;
+
+		for(int i = 0; i < lowerCaseWord.length(); i++) {
+			Character characCurr = lowerCaseWord.charAt(i);
+			TrieNode nodeChild = currNode.getChild(characCurr);
+
+			if(Objects.isNull(nodeChild)) {
+				return new ArrayList<String>();
+			}
+
+			currNode = currNode.getChild(characCurr);
+		}
+
+		
+		while(true) {
+
+			Iterator<Character> it = currNode.getValidNextCharacters().iterator();
+
+			while (it.hasNext()) {
+				queue.addLast(currNode.getChild(it.next()));
+			}
+
+			if(currNode.endsWord()) {
+				resultList.add(currNode.getText());
+			}
+
+			if(queue.isEmpty() || resultList.size() == numCompletions) {
+				break;
+			}
+
+			currNode = queue.removeFirst();
+		}
     	 
-         return null;
+         return resultList;
      }
 
- 	// For debugging
- 	public void printTree()
- 	{
- 		printNode(root);
- 	}
- 	
- 	/** Do a pre-order traversal from this node down */
- 	public void printNode(TrieNode curr)
- 	{
- 		if (curr == null) 
- 			return;
- 		
- 		System.out.println(curr.getText());
- 		
- 		TrieNode next = null;
- 		for (Character c : curr.getValidNextCharacters()) {
- 			next = curr.getChild(c);
- 			printNode(next);
- 		}
- 	}
- 	
+	// For debugging
+	public void printTree() {
+		printNode(root);
+	}
 
-	
+	/** Do a pre-order traversal from this node down */
+	public void printNode(TrieNode curr) {
+		if (curr == null)
+			return;
+
+		System.out.println(curr.getText() + " | " + curr.endsWord());
+
+		TrieNode next = null;
+		for (Character c : curr.getValidNextCharacters()) {
+			next = curr.getChild(c);
+			printNode(next);
+		}
+	}
+
 }
