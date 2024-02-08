@@ -90,7 +90,7 @@ public class NearbyWords implements SpellingSuggest {
 				if (!currentList.contains(sb.toString()) &&
 						(!wordsOnly || dict.isWord(sb.toString())) &&
 						!s.equals(sb.toString())) {
-					currentList.add(prefix + (char)charCode + sufix);
+					currentList.add(prefix + (char) charCode + sufix);
 				}
 			}
 		}
@@ -107,6 +107,10 @@ public class NearbyWords implements SpellingSuggest {
 	 */
 	public void deletions(String s, List<String> currentList, boolean wordsOnly) {
 		// TODO: Implement this method
+		for (int index = 0; index < s.length(); index++) {
+			StringBuffer sb = new StringBuffer(s);
+			currentList.add(sb.deleteCharAt(index).toString());
+		}
 	}
 
 	/**
@@ -153,35 +157,6 @@ public class NearbyWords implements SpellingSuggest {
 		 * System.out.println("Spelling Suggestions for \""+word+"\" are:");
 		 * System.out.println(suggest);
 		 */
-	}
-
-}
-
-/**
- * InnerNearbyWords
- */
-class InnerNearbyWords {
-
-	public void insertions(String s, List<String> currentList) {
-		// TODO: Implement this method
-		for (int index = 0; index <= s.length(); index++) {
-			for (int charCode = (int) 'a'; charCode <= (int) 'z'; charCode++) {
-
-				StringBuffer sb = new StringBuffer(s);
-				String prefix = sb.substring(0, index);
-				String sufix = sb.substring(index);
-
-				currentList.add(prefix + (char)charCode + sufix);
-			}
-		}
-	}
-
-	public static void main(String[] args) {
-		List<String> arr = new ArrayList<>();
-		InnerNearbyWords inw = new InnerNearbyWords();
-		inw.insertions("proximo", arr);
-
-		System.out.println(arr);
 	}
 
 }
