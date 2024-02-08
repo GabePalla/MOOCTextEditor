@@ -86,11 +86,12 @@ public class NearbyWords implements SpellingSuggest {
 				StringBuffer sb = new StringBuffer(s);
 				String prefix = sb.substring(0, index);
 				String sufix = sb.substring(index);
+				String finalStr = prefix + (char) charCode + sufix;
 
-				if (!currentList.contains(sb.toString()) &&
-						(!wordsOnly || dict.isWord(sb.toString())) &&
-						!s.equals(sb.toString())) {
-					currentList.add(prefix + (char) charCode + sufix);
+				if (!currentList.contains(finalStr) &&
+						(!wordsOnly || dict.isWord(finalStr)) &&
+						!s.equals(finalStr)) {
+					currentList.add(finalStr);
 				}
 			}
 		}
@@ -109,7 +110,13 @@ public class NearbyWords implements SpellingSuggest {
 		// TODO: Implement this method
 		for (int index = 0; index < s.length(); index++) {
 			StringBuffer sb = new StringBuffer(s);
-			currentList.add(sb.deleteCharAt(index).toString());
+			String finalStr = sb.deleteCharAt(index).toString();
+
+			if (!currentList.contains(finalStr) &&
+						(!wordsOnly || dict.isWord(finalStr)) &&
+						!s.equals(finalStr)) {
+					currentList.add(finalStr);
+				}
 		}
 	}
 
@@ -141,22 +148,21 @@ public class NearbyWords implements SpellingSuggest {
 	}
 
 	public static void main(String[] args) {
-		/*
-		 * basic testing code to get started
-		 * String word = "i";
-		 * // Pass NearbyWords any Dictionary implementation you prefer
-		 * Dictionary d = new DictionaryHashSet();
-		 * DictionaryLoader.loadDictionary(d, "data/dict.txt");
-		 * NearbyWords w = new NearbyWords(d);
-		 * List<String> l = w.distanceOne(word, true);
-		 * System.out.println("One away word Strings for for \""+word+"\" are:");
-		 * System.out.println(l+"\n");
-		 * 
-		 * word = "tailo";
-		 * List<String> suggest = w.suggestions(word, 10);
-		 * System.out.println("Spelling Suggestions for \""+word+"\" are:");
-		 * System.out.println(suggest);
-		 */
+		
+		//  basic testing code to get started
+		 String word = "goo";
+		//  // Pass NearbyWords any Dictionary implementation you prefer
+		 Dictionary d = new DictionaryHashSet();
+		 DictionaryLoader.loadDictionary(d, "data/dict.txt");
+		 NearbyWords w = new NearbyWords(d);
+		 List<String> l = w.distanceOne(word, true);
+		 System.out.println("One away word Strings for for \""+word+"\" are:");
+		 System.out.println(l+"\n");
+		 
+		//  word = "tailo";
+		//  List<String> suggest = w.suggestions(word, 10);
+		//  System.out.println("Spelling Suggestions for \""+word+"\" are:");
+		//  System.out.println(suggest);
 	}
 
 }
