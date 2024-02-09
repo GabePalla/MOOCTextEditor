@@ -132,7 +132,7 @@ public class NearbyWords implements SpellingSuggest {
 	public List<String> suggestions(String word, int numSuggestions) {
 
 		// initial variables
-		List<String> queue = new LinkedList<String>(); // String to explore
+		LinkedList<String> queue = new LinkedList<String>(); // String to explore
 		HashSet<String> visited = new HashSet<String>(); // to avoid exploring the same
 															// string multiple times
 		List<String> retList = new LinkedList<String>(); // words to return
@@ -142,6 +142,23 @@ public class NearbyWords implements SpellingSuggest {
 		visited.add(word);
 
 		// TODO: Implement the remainder of this method, see assignment for algorithm
+		
+		while(!queue.isEmpty() && numSuggestions > 0) {
+			List<String> wordsList = distanceOne(queue.poll(), false);
+			for (String wrd : wordsList) {
+				if(!visited.contains(wrd)) {
+					visited.add(wrd);
+					queue.offer(wrd);
+					if(dict.isWord(wrd)) {
+						retList.add(wrd);
+						--numSuggestions;
+					}
+				}
+			}
+			if(visited.size() == THRESHOLD) {
+				break;
+			}
+		}
 
 		return retList;
 
@@ -155,14 +172,14 @@ public class NearbyWords implements SpellingSuggest {
 		 Dictionary d = new DictionaryHashSet();
 		 DictionaryLoader.loadDictionary(d, "data/dict.txt");
 		 NearbyWords w = new NearbyWords(d);
-		 List<String> l = w.distanceOne(word, true);
-		 System.out.println("One away word Strings for for \""+word+"\" are:");
-		 System.out.println(l+"\n");
+		//  List<String> l = w.distanceOne(word, true);
+		//  System.out.println("One away word Strings for for \""+word+"\" are:");
+		//  System.out.println(l+"\n");
 		 
-		//  word = "tailo";
-		//  List<String> suggest = w.suggestions(word, 10);
-		//  System.out.println("Spelling Suggestions for \""+word+"\" are:");
-		//  System.out.println(suggest);
+		 word = "tailo";
+		 List<String> suggest = w.suggestions(word, 10);
+		 System.out.println("Spelling Suggestions for \""+word+"\" are:");
+		 System.out.println(suggest);
 	}
 
 }
